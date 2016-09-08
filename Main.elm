@@ -7,7 +7,7 @@ import Html.Events exposing (onClick)
 main =
   beginnerProgram { 
     model = Model {children = []}, 
-    view = view identity, 
+    view = view, 
     update = update 
   }
 
@@ -32,16 +32,16 @@ update msg (Model model) =
     RemoveSelf -> 
       Model { model | children = [] }
 
-view at (Model model) =
+view (Model model) =
   div [] [ 
     text ("Node "),
-    button [onClick (at AddChild)] [text "+"],
-    button [onClick (at RemoveSelf)] [text "-"],
-    ul [] (List.indexedMap (childView at) model.children) 
+    button [onClick AddChild] [text "+"],
+    button [onClick RemoveSelf] [text "-"],
+    ul [] (List.indexedMap childView model.children) 
   ]
 
-childView at i child =
-  li [] [view (\m -> at (At i m)) child]
+childView i child =
+  li [] [Html.App.map (At i) (view child)]
 
 
 
